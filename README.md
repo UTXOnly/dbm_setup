@@ -1,16 +1,18 @@
-# Database Management Setup Script 
+# Postgres Database Management Setup Script 
 
 ## Overview
 
-The DBM setup script is a Python script designed to facilitate database management tasks, including user and schema creation, extension installation, and checking PostgreSQL statistics. This document provides instructions on how to set up and use the script.
+The DBM setup script is a Python script designed to facilitate preparing your Postgres databses for monitoring with [Datadog's Database Monitoring](https://docs.datadoghq.com/database_monitoring/setup_postgres/selfhosted/?tab=postgres15), including user and schema creation, extension installation, and checking PostgreSQL statistics. This document provides instructions on how to use the setup script to prepare your databases. 
 
 ## Prerequisites
 
 Before using the script, ensure the following prerequisites are met:
 
 - Python 3.10 is installed on your system.
-- PostgreSQL is installed and running.
-- The necessary PostgreSQL client library (libpq) is installed.
+- Your Postgres databse has `pg_stat_statements` enabled in your `postgresql.conf` file.
+```
+shared_preload_libraries = 'pg_stat_statements'  # (change requires restart)
+```
 
 ## Setup
 
@@ -36,6 +38,8 @@ Before using the script, ensure the following prerequisites are met:
 
 4. Run the Script:
    * This command activates the virtual environment, installs/upgrades dependencies, and executes the `dbm_setup.py` script.
+
+
    ```
    make run
    ```
@@ -54,7 +58,14 @@ docker run -d --name postgres-container -p 5432:5432 \
   postgres -c 'config_file=/etc/postgresql/postgresql.conf'
 ```
 
+To create an additional databse for testing:
+```
+psql -h localhost -p 6333 -U postgres -c "CREATE DATABASE testdb;"
+```
+
 ![Alt text](<./img/Screen Recording 2023-11-28 at 10.11.06 AM.gif>)
 
 ### Check PostgreSQL Statistics:
-After running the script, review the console output to ensure that PostgreSQL connections, activity, and statistics are reported correctly.
+After running the script, review the console output to ensure that PostgreSQL connections, activity, and statistics are reported correctly. If no errors are present, the script will print a list of databses that were successfully prepared at the end of the script.
+
+![Alt text](<./img/Image 2023-11-28 at 11.03.44 AM.jpg>)
