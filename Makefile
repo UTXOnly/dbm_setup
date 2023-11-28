@@ -20,7 +20,7 @@ dependencies: venv
 	$(PIP) install -r requirements.txt
 
 run: dependencies venv
-	$(PYTHON) dbm2.py
+	$(PYTHON) dbm_setup.py
 
 
 

@@ -103,6 +103,8 @@ def create_pg_stat_statements_extension(conn_obj):
     except psycopg2.Error as e:
         print(f"{RED}Error installing pg_stat_statements extension: {e}")
 
+successful_setup = []
+
 def check_postgres_stats(conn_obj, db):
     try:
         # Create pg_stat_statements extension if not already created
@@ -117,9 +119,9 @@ def check_postgres_stats(conn_obj, db):
 
             cur.execute("SELECT 1 FROM pg_stat_statements LIMIT 1;")
             print(f"{GREEN}Postgres pg_stat_statements read OK in {db}")
-
+        successful_setup.append(db_name)
         print(f"{RED}\n############### Moving On... to next database ###############################\n{RESET}")
-        #conn_obj.close()
+        
     except psycopg2.OperationalError as exc:
         print(f"{RED}Error querying pg_stats from{db}{RESET}: {exc}")
     except psycopg2.Error:
@@ -142,14 +144,17 @@ try:
 except psycopg2.Error as e:
     print_error(f"An error occurred while connecting to the database: {e}")
 
+
 # Iterate through the list of database names, run checks, and create schemas
 for db_name in databases_list:
     print_success(f"Discovered database: {db_name}\nCreating schema and checking permissions + stats")
     connection_params['dbname'] = db_name
-    print(connection_params)
     conn = psycopg2.connect(**connection_params)
     create_datadog_user_and_schema(conn, db_name)
     explain_statement(conn)
     check_postgres_stats(conn, db_name)
 
+
 print("Setup complete!")
+print_success("The databse monitoring setup completed sucessfully on the following databses:")
+print(f"\n {successful_setup}")
