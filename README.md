@@ -20,14 +20,8 @@ shared_preload_libraries = 'pg_stat_statements'  # (change requires restart)
    ```bash
    git clone https://github.com/yourusername/dbm2.git
    cd dbm2
-2. Create a Virtual Environment:
 
-   ```
-   make venv
-   ```
-
-
-3. Edit the `.env`` in the project directory and add the following environment variables with your PostgreSQL connection details:
+2. Edit the `.env`` in the project directory and add the following environment variables with your PostgreSQL connection details:
    ```
    DBHOST=your_database_host
    PORT=your_database_port
@@ -36,7 +30,7 @@ shared_preload_libraries = 'pg_stat_statements'  # (change requires restart)
    PASSWORD=your_database_password
    ```
 
-4. Run the Script:
+3. Run the Script:
    * This command activates the virtual environment, installs/upgrades dependencies, and executes the `dbm_setup.py` script.
 
 
